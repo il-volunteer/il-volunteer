@@ -123,11 +123,13 @@ router.post('/', async (req, res) => {
   logger.info('started offer post request');
   try {
     const data = req.body;
-    try {
-      await validateOfferData(data);
-    } catch (e) {
-      return res.status(400).json({ error: e.message });
-    }
+
+    // try {
+    //   await validateOfferData(data);
+    // } catch (e) {
+    //   return res.status(400).json({ error: e.message });
+    // }
+    
     logger.info(`try add offer with data ${JSON.stringify(data)}`);
     const newOfferId = await addUuidEntity({
       data: {
