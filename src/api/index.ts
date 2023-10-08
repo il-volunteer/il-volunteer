@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   });
 });
 app.use('/categories', authMiddleware, categories);
-app.use(['/offer', '/offers'], authMiddleware, require('./offer'));
+app.use(['/offer', '/offers'], require('./offer'));
 
 const PORT_NUMBER = process.env.PORT || 3000;
 app.listen(PORT_NUMBER);

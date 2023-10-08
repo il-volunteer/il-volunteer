@@ -129,13 +129,10 @@ router.post('/', async (req, res) => {
     // } catch (e) {
     //   return res.status(400).json({ error: e.message });
     // }
-    
+
     logger.info(`try add offer with data ${JSON.stringify(data)}`);
     const newOfferId = await addUuidEntity({
-      data: {
-        ...data,
-        offererUserName: extractUserNameFromAuth(req),
-      },
+      data,
       modelName: OFFER_MODEL,
     });
 
