@@ -1,0 +1,593 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "version": "1.0.0", 
+      "title": "Friendborhood API",
+      "description": "Api to share stuff with people around you",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "components": {
+  "securitySchemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  }
+},
+    "security": [{
+      "bearerAuth": []  
+    }],
+    "paths": {
+    "/user/login": {
+    "post": {
+      "tags": ["User"],
+      "summary": "Get token by name",
+      "responses": {
+        "200": {
+          "description": "OK"
+        }
+      }
+    }
+  },
+  "/user": {
+    "post": {
+      "security": [],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "required": true,
+          "description": "Add user to DB",
+          "schema": {
+            "$ref": "#/definitions/UserSignUpDetails"
+          }
+        }
+      ],
+      "tags": ["User"],
+      "summary": "Add a new user to DB",
+      "requestBody":{
+          "content":{
+  "application/json":{
+    "schema":{      
+      "type": "object",
+      "$ref": "#/definitions/UserSignUpDetails"
+    },
+      "required": true
+  }
+}
+  },
+      "responses": {
+        "200": {
+          "description": "Created"
+        }
+      }
+    }
+  },
+  "/user/{userName}": {
+        "parameters": [
+            {
+              "name": "userName",
+              "in": "path",
+              "required": true,
+              "description": "Name of the user that we want to find",
+              "type": "string"
+            }
+          ],
+      "get": {
+        "tags": ["User"],
+        "summary": "Get public user data by userName",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserFullDetails"
+            }
+          }
+      }
+    }
+  },
+  "/user/me": {
+    "get": {
+      "tags": ["User"],
+      "summary": "Get the user which was authenticated",
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "$ref": "#/definitions/UserFullDetails"
+          }
+        }
+      }
+    },
+    "patch": {
+      "parameters": [
+        {
+          "name": "supportedProperties",
+          "in": "body",
+          "required": true,
+          "schema":{
+            "$ref":"#/definitions/UserFullDetails"
+          }
+        }
+      ],
+      "tags": ["User"],
+      "summary": "Update user by id",
+      "responses": {
+        "200": {
+          "description": "Updated"
+          },
+        "401": {
+          "description": "Unauthorized"
+          },
+        "404": {
+          "description": "id not found"
+          }
+        }
+      }
+  },
+        "/item": {
+          "post": {
+            "parameters": [
+              {
+                "name": "body",
+                "in": "body",
+                "required": true,
+                "description": "Add item to DB",
+                "schema": {
+                  "$ref": "#/definitions/Item"
+                }
+              }
+            ],
+            "tags": ["Item"],
+            "summary": "Add a new item to DB",
+            "requestBody":{
+                "content":{
+        "application/json":{
+          "schema":{      
+            "type": "object",
+            "$ref": "#/definitions/Item"
+          },
+            "required": true
+        }
+    }
+        },
+            "responses": {
+              "200": {
+                "description": "Created"
+              }
+            }
+          },
+          "get": {
+            "parameters": [
+              {
+                "name": "categoryName",
+                "in": "query",
+                "required": false,
+                "description": "Category Name of the item we want to find",
+                "type": "string"
+              }
+            ],
+            "tags": ["Item"],
+            "summary": "Get all/filtered items",
+            "responses": {
+              "200": {
+                "description": "OK"
+              }
+            }
+          }
+      },
+      "/categories": {
+        "get": {
+          "tags": ["Item"],
+          "summary": "Get all supported categories",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Error fetching categories"
+            }
+          }
+        }
+    },
+      "/item/{itemId}": {
+        "parameters": [
+            {
+              "name": "itemId",
+              "in": "path",
+              "required": true,
+              "description": "ID of item that we want to find",
+              "type": "string"
+            }
+          ],
+      "get": {
+        "tags": ["Item"],
+        "summary": "Get item by id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Item"
+            }
+          }
+        }
+      },
+      "patch": {
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "description": "Update item in DB"
+          },
+          {
+            "name": "supportedProperties",
+            "in": "body",
+            "required": true,
+            "schema":{
+              "$ref":"#/definitions/Item"
+            }
+          }
+        ],
+        "tags": ["Item"],
+        "summary": "Update item by id",
+        "responses": {
+          "200": {
+            "description": "Updated"
+            },
+          "401": {
+            "description": "Unauthorized"
+            },
+          "404": {
+            "description": "id not found"
+            }
+          }
+        },
+      "delete": {
+        "tags": ["Item"],
+        "summary": "Delete item by id",
+        "responses": {
+          "200": {
+            "description": "Deleted"
+            },
+          "401": {
+            "description": "Unauthorized"
+            },
+          "404": {
+            "description": "id not found"
+            }
+          }
+        }
+    },
+    "/offer": {
+      "post": {
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "Add offer to DB",
+            "schema": {
+              "$ref": "#/definitions/Offer"
+            }
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Add a new offer to DB",
+        "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{      
+                  "type": "object",
+                  "$ref": "#/definitions/Offer"
+                },
+                  "required": true
+              }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created"
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "query",
+            "required": false,
+            "description": "Category Name of the offer we want to find",
+            "type": "string"
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Get all/filtered Offers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "No Offered Items were found"
+          }
+        }
+      }
+    },
+    "/offer/in-area": {
+      "get": {
+        "parameters": [
+          {
+            "name": "categories[]",
+            "in": "query",
+            "required": false,
+            "description": "Category Names of the offer we want to find",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$type": "string"
+              }
+          }
+        },
+          {
+            "name": "newest",
+            "in": "query",
+            "required": false,
+            "description": "Sort offer by newest? (pass true)",
+            "type": "boolean"
+          },
+          {
+            "name": "filterSelf",
+            "in": "query",
+            "required": false,
+            "description": "Sort offer by newest? (pass true)",
+            "type": "boolean"
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "required": true,
+            "description": "Maximum radius limit of offers in area",
+            "type": "integer"
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Get all/filtered Offers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Missing parameter"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/offer/me": {
+      "get": {
+        "tags": ["Offer"],
+        "summary": "Get user Offers sorted by newest",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Missing parameter"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/offer/{offerId}": {
+      "patch": {
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "description": "patch offer",
+              "schema": {
+                "$ref": "#/definitions/Offer"
+              }
+            }
+          ],
+          "tags": ["Offer"],
+          "summary": "patch offer",
+          "requestBody":{
+              "content":{
+                "application/json":{
+                  "schema":{      
+                    "type": "object",
+                    "$ref": "#/definitions/Offer"
+                  },
+                    "required":false
+                }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Created"
+            }
+          }
+        
+      },
+      "delete": {
+        "parameters": [
+          {
+            "name": "offerId",
+            "in": "path",
+            "required": true,
+            "description": "Delete offer from DB"
+          }
+        ],
+        "tags": ["Offer"],
+        "summary": "Delete offer by id",
+        "responses": {
+          "200": {
+            "description": "Deleted"
+            },
+          "401": {
+            "description": "Unauthorized"
+            },
+          "404": {
+            "description": "id not found"
+            }
+          }
+        }
+    }
+      },
+      "definitions": {
+        "UserFullDetails": {
+          "required": ["userName"],
+          "properties": {
+              "userName": {
+              "type": "string",
+              "uniqueItems": true
+                },
+            "firstName": {
+              "type": "string"
+            },
+            "lastName": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "registerDate": {
+                "type": "integer"
+            },
+            "favoriteCategory": [{
+              "type": "string"
+            }],
+            "imageUrl": {
+              "type": "string"
+            },
+            "location": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "string"
+              },
+              "geoCode": {
+                "type": "object",
+            "properties": {
+              "lat": {
+                "type": "number"
+              },
+              "lng": {
+                "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+      },
+      "UserSignUpDetails": {
+        "required": ["userName"],
+        "properties": {
+            "userName": {
+            "type": "string",
+            "uniqueItems": true
+              },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string"
+          }
+    }
+    },
+      "Item": {
+        "properties": {
+          "itemName": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "categoryName": {
+            "type": "string"
+          }
+      },
+      "required": ["itemId"]
+    },
+    "Offer": {
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "priceAsked":{
+          "type": "integer"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "geoCode": {
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "type": "number"
+                },
+                "lng": {
+                  "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "lastUpdatedAt": {
+            "type": "string" 
+          }
+        },
+    "required": ["offerId"]
+  }
+    },
+    "tags": [
+      {
+        "name": "User",
+        "description": "API for user in the system"
+      },
+      {
+        "name": "Item",
+        "description": "API for item in the system"
+      },
+      {
+        "name": "Offer",
+        "description": "API for offers in the system"
+      }
+    ],
+    "schemes": ["http", "https"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"]
+  }
