@@ -5,7 +5,6 @@ const {
   findByCategory,
   findByOfferId,
   findAll,
-  validateOfferData,
   getOffersInArea,
   getSelfOffers,
   sortOffersByDistance,
